@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aman API Tester</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: white;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        .test-section {
+            margin-bottom: 25px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        button {
+            background: linear-gradient(45deg, #FF6B6B, #4ECDC4);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            margin: 5px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+        button:disabled {
+            background: #666;
+            cursor: not-allowed;
+            transform: none;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            margin: 10px 0;
+            font-size: 16px;
+        }
+        input::placeholder, textarea::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+        .result {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            white-space: pre-wrap;
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .status-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .active { border-left: 4px solid #4ECDC4; }
+        .failed { border-left: 4px solid #FF6B6B; }
+        .loading {
+            display: inline-block;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Aman API Tester</h1>
+        
+        <!-- API Status Section -->
+        <div class="test-section">
+            <h3>📊 API Status Check</h3>
+            <button onclick="checkAPIStatus()">Check Status</button>
+            <button onclick="resetKeys()">Reset All Keys</button>
+            <div id="statusResult" class="result" style="display:none;"></div>
+        </div>
+
+        <!-- Message Test Section -->
+        <div class="test-section">
+            <h3>💬 Message Test</h3>
+            <textarea id="testMessage" placeholder="Enter your message here..." rows="3">Hello, kya haal hai?</textarea>
+            <button onclick="sendTestMessage()">Send Message</button>
+            <div id="messageResult" class="result" style="display:none;"></div>
+        </div>
+
+        <!-- Quick Tests -->
+        <div class="test-section">
+            <h3>⚡ Quick Tests</h3>
+            <button onclick="quickTest('Hindi')">Hindi Test</button>
+            <button onclick="quickTest('English')">English Test</button>
+            <button onclick="quickTest('Long')">Long Message Test</button>
+            <button onclick="rapidFireTest()">Rapid Fire (5 requests)</button>
+        </div>
+
+        <!-- Live Status -->
+        <div class="test-section">
+            <h3>🔴 Live API Status</h3>
+            <div id="liveStatus" class="status-grid"></div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'https://api-zd2s.onrender.com';
+        
+        async function checkAPIStatus() {
+            const button = event.target;
+            const originalText = button.textContent;
+            button.textContent = '⏳ Checking...';
+            button.disabled = true;
+            
+            try {
+                const response = await fetch(`${API_URL}/api-status`);
+                const data = await response.json();
+                
+                document.getElementById('statusResult').style.display = 'block';
+                document.getElementById('statusResult').textContent = 
+                    `📈 Total Keys: ${data.totalKeys}\n` +
+                    `✅ Active Keys: ${data.activeKeys}\n` +
+                    `❌ Failed Keys: ${data.failedKeys}\n\n` +
+                    `📋 Key Details:\n${JSON.stringify(data.keyStats.slice(0, 10), null, 2)}`;
+                
+                updateLiveStatus(data);
+                
+            } catch (error) {
+                document.getElementById('statusResult').style.display = 'block';
+                document.getElementById('statusResult').textContent = `❌ Error: ${error.message}`;
+            }
+            
+            button.textContent = originalText;
+            button.disabled = false;
+        }
+
+        async function sendTestMessage() {
+            const message = document.getElementById('testMessage').value;
+            const button = event.target;
+            const originalText = button.textContent;
+            
+            if (!message.trim()) {
+                alert('Please enter a message');
+                return;
+            }
+            
+            button.textContent = '⏳ Sending...';
+            button.disabled = true;
+            
+            try {
+                const response = await fetch(`${API_URL}/gemini`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: message })
+                });
+                
+                const data = await response.json();
+                
+                document.getElementById('messageResult').style.display = 'block';
+                
+                if (data.error) {
+                    document.getElementById('messageResult').textContent = 
+                        `❌ Error: ${data.error}\n` +
+                        `🔑 Key Used: #${data.keyUsed || 'Unknown'}\n` +
+                        `🔄 Attempts: ${data.attemptsUsed || 'Unknown'}`;
+                } else {
+                    document.getElementById('messageResult').textContent = 
+                        `✅ Success!\n` +
+                        `🔑 Key Used: #${data.keyUsed}\n` +
+                        `🔄 Attempts: ${data.attemptsUsed}\n\n` +
+                        `📝 Reply: ${data.reply}`;
+                }
+                
+            } catch (error) {
+                document.getElementById('messageResult').style.display = 'block';
+                document.getElementById('messageResult').textContent = `❌ Network Error: ${error.message}`;
+            }
+            
+            button.textContent = originalText;
+            button.disabled = false;
+        }
+
+        async function quickTest(type) {
+            const messages = {
+                'Hindi': 'Namaste! Aap kaise hain?',
+                'English': 'Hello! How are you today?',
+                'Long': 'Tell me a detailed story about a robot who becomes friends with a cat and they go on adventures together in a magical forest.'
+            };
+            
+            document.getElementById('testMessage').value = messages[type];
+            await sendTestMessage();
+        }
+
+        async function rapidFireTest() {
+            const button = event.target;
+            button.textContent = '⏳ Firing 5 requests...';
+            button.disabled = true;
+            
+            let results = '🔥 Rapid Fire Test Results:\n\n';
+            
+            for (let i = 1; i <= 5; i++) {
+                try {
+                    const response = await fetch(`${API_URL}/gemini`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ message: `Rapid test ${i}` })
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (data.error) {
+                        results += `❌ Request ${i}: FAILED - ${data.error}\n`;
+                    } else {
+                        results += `✅ Request ${i}: SUCCESS (Key #${data.keyUsed})\n`;
+                    }
+                    
+                } catch (error) {
+                    results += `❌ Request ${i}: NETWORK ERROR - ${error.message}\n`;
+                }
+                
+                // Small delay between requests
+                await new Promise(resolve => setTimeout(resolve, 500));
+            }
+            
+            document.getElementById('messageResult').style.display = 'block';
+            document.getElementById('messageResult').textContent = results;
+            
+            button.textContent = 'Rapid Fire (5 requests)';
+            button.disabled = false;
+        }
+
+        async function resetKeys() {
+            const button = event.target;
+            button.textContent = '⏳ Resetting...';
+            button.disabled = true;
+            
+            try {
+                const response = await fetch(`${API_URL}/reset-keys`, {
+                    method: 'POST'
+                });
+                const data = await response.json();
+                
+                document.getElementById('statusResult').style.display = 'block';
+                document.getElementById('statusResult').textContent = 
+                    `✅ ${data.message}\n` +
+                    `🔑 Active Keys: ${data.activeKeys}`;
+                    
+            } catch (error) {
+                document.getElementById('statusResult').style.display = 'block';
+                document.getElementById('statusResult').textContent = `❌ Reset Error: ${error.message}`;
+            }
+            
+            button.textContent = 'Reset All Keys';
+            button.disabled = false;
+        }
+
+        function updateLiveStatus(statusData) {
+            const liveStatus = document.getElementById('liveStatus');
+            liveStatus.innerHTML = '';
+            
+            // Summary cards
+            liveStatus.innerHTML = `
+                <div class="status-card active">
+                    <h4>📊 Total Keys</h4>
+                    <div style="font-size: 24px; font-weight: bold;">${statusData.totalKeys}</div>
+                </div>
+                <div class="status-card active">
+                    <h4>✅ Active Keys</h4>
+                    <div style="font-size: 24px; font-weight: bold; color: #4ECDC4;">${statusData.activeKeys}</div>
+                </div>
+                <div class="status-card failed">
+                    <h4>❌ Failed Keys</h4>
+                    <div style="font-size: 24px; font-weight: bold; color: #FF6B6B;">${statusData.failedKeys}</div>
+                </div>
+                <div class="status-card">
+                    <h4>📈 Success Rate</h4>
+                    <div style="font-size: 24px; font-weight: bold;">${Math.round((statusData.activeKeys / statusData.totalKeys) * 100)}%</div>
+                </div>
+            `;
+        }
+
+        // Auto-refresh status every 30 seconds
+        setInterval(async () => {
+            try {
+                const response = await fetch(`${API_URL}/api-status`);
+                const data = await response.json();
+                updateLiveStatus(data);
+            } catch (error) {
+                console.log('Auto-refresh failed:', error);
+            }
+        }, 30000);
+
+        // Load initial status
+        window.onload = () => {
+            checkAPIStatus();
+        };
+    </script>
+</body>
+</html>
