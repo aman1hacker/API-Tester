@@ -100,6 +100,91 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+        
+        /* Chat Interface Styles */
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            height: 400px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .chat-history {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .message {
+            max-width: 80%;
+            padding: 10px 15px;
+            border-radius: 18px;
+            margin: 5px 0;
+            word-wrap: break-word;
+        }
+        .user-message {
+            align-self: flex-end;
+            background: linear-gradient(45deg, #4ECDC4, #2a8f87);
+            border-bottom-right-radius: 5px;
+        }
+        .bot-message {
+            align-self: flex-start;
+            background: rgba(255, 255, 255, 0.1);
+            border-bottom-left-radius: 5px;
+        }
+        .chat-input {
+            display: flex;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.3);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .chat-input input {
+            flex: 1;
+            margin: 0 10px 0 0;
+            padding: 12px;
+            border-radius: 20px;
+        }
+        .chat-input button {
+            border-radius: 20px;
+            padding: 12px 20px;
+        }
+        .timestamp {
+            font-size: 0.7em;
+            opacity: 0.7;
+            margin-top: 5px;
+            text-align: right;
+        }
+        .typing-indicator {
+            display: none;
+            align-self: flex-start;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px 15px;
+            border-radius: 18px;
+            border-bottom-left-radius: 5px;
+            margin: 5px 0;
+        }
+        .typing-indicator span {
+            height: 8px;
+            width: 8px;
+            background: rgba(255, 255, 255, 0.7);
+            display: inline-block;
+            border-radius: 50%;
+            margin: 0 2px;
+            animation: typing 1.5s infinite;
+        }
+        .typing-indicator span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        .typing-indicator span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        @keyframes typing {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
     </style>
 </head>
 <body>
@@ -114,12 +199,26 @@
             <div id="statusResult" class="result" style="display:none;"></div>
         </div>
 
-        <!-- Message Test Section -->
+        <!-- Enhanced Chat Section -->
         <div class="test-section">
-            <h3>💬 Message Test</h3>
-            <textarea id="testMessage" placeholder="Enter your message here..." rows="3">Hello, kya haal hai?</textarea>
-            <button onclick="sendTestMessage()">Send Message</button>
-            <div id="messageResult" class="result" style="display:none;"></div>
+            <h3>💬 Chat Interface</h3>
+            <div class="chat-container">
+                <div class="chat-history" id="chatHistory">
+                    <div class="message bot-message">
+                        Hello! I'm your API testing assistant. Send me a message to test the API.
+                        <div class="timestamp">System</div>
+                    </div>
+                </div>
+                <div class="typing-indicator" id="typingIndicator">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+                <div class="chat-input">
+                    <input type="text" id="chatInput" placeholder="Type your message here..." onkeypress="handleKeyPress(event)">
+                    <button onclick="sendChatMessage()">Send</button>
+                </div>
+            </div>
         </div>
 
         <!-- Quick Tests -->
@@ -134,12 +233,128 @@
         <!-- Live Status -->
         <div class="test-section">
             <h3>🔴 Live API Status</h3>
-            <div id="liveStatus" class="status-grid"></div>
+            <div id="liveStatus" class="status-grid">
+                <div class="status-card">
+                    <h4>📊 Total Keys</h4>
+                    <div style="font-size: 24px; font-weight: bold;">-</div>
+                </div>
+                <div class="status-card">
+                    <h4>✅ Active Keys</h4>
+                    <div style="font-size: 24px; font-weight: bold; color: #4ECDC4;">-</div>
+                </div>
+                <div class="status-card">
+                    <h4>❌ Failed Keys</h4>
+                    <div style="font-size: 24px; font-weight: bold; color: #FF6B6B;">-</div>
+                </div>
+                <div class="status-card">
+                    <h4>📈 Success Rate</h4>
+                    <div style="font-size: 24px; font-weight: bold;">-</div>
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
         const API_URL = 'https://api-zd2s.onrender.com';
+        let chatHistory = [];
+        
+        // Format timestamp
+        function formatTime(date) {
+            return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        }
+        
+        // Add message to chat history
+        function addMessageToChat(text, isUser = false) {
+            const chatHistoryElement = document.getElementById('chatHistory');
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('message');
+            messageElement.classList.add(isUser ? 'user-message' : 'bot-message');
+            
+            const timestamp = document.createElement('div');
+            timestamp.classList.add('timestamp');
+            timestamp.textContent = isUser ? 'You' : 'API Response';
+            
+            messageElement.textContent = text;
+            messageElement.appendChild(timestamp);
+            chatHistoryElement.appendChild(messageElement);
+            
+            // Scroll to bottom
+            chatHistoryElement.scrollTop = chatHistoryElement.scrollHeight;
+            
+            // Store in history
+            chatHistory.push({
+                text,
+                isUser,
+                time: new Date()
+            });
+        }
+        
+        // Show typing indicator
+        function showTypingIndicator() {
+            document.getElementById('typingIndicator').style.display = 'flex';
+            document.getElementById('chatHistory').scrollTop = document.getElementById('chatHistory').scrollHeight;
+        }
+        
+        // Hide typing indicator
+        function hideTypingIndicator() {
+            document.getElementById('typingIndicator').style.display = 'none';
+        }
+        
+        // Handle Enter key press
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendChatMessage();
+            }
+        }
+        
+        // Send chat message
+        async function sendChatMessage() {
+            const inputElement = document.getElementById('chatInput');
+            const message = inputElement.value.trim();
+            
+            if (!message) return;
+            
+            // Add user message to chat
+            addMessageToChat(message, true);
+            
+            // Clear input
+            inputElement.value = '';
+            
+            // Show typing indicator
+            showTypingIndicator();
+            
+            try {
+                // Try to send to API
+                const response = await fetch(`${API_URL}/gemini`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: message })
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`API returned ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
+                // Hide typing indicator
+                hideTypingIndicator();
+                
+                if (data.error) {
+                    addMessageToChat(`Error: ${data.error}\nKey Used: #${data.keyUsed || 'Unknown'}`);
+                } else {
+                    addMessageToChat(data.reply);
+                }
+                
+            } catch (error) {
+                // Hide typing indicator
+                hideTypingIndicator();
+                
+                // Show error message
+                addMessageToChat("Sorry, I couldn't connect to the API server. This might be due to:\n\n1. The server being down\n2. Network connectivity issues\n3. CORS restrictions\n\nPlease check the API status or try again later.");
+                console.error("API Error:", error);
+            }
+        }
         
         async function checkAPIStatus() {
             const button = event.target;
@@ -149,6 +364,11 @@
             
             try {
                 const response = await fetch(`${API_URL}/api-status`);
+                
+                if (!response.ok) {
+                    throw new Error(`API returned ${response.status}`);
+                }
+                
                 const data = await response.json();
                 
                 document.getElementById('statusResult').style.display = 'block';
@@ -162,53 +382,20 @@
                 
             } catch (error) {
                 document.getElementById('statusResult').style.display = 'block';
-                document.getElementById('statusResult').textContent = `❌ Error: ${error.message}`;
-            }
-            
-            button.textContent = originalText;
-            button.disabled = false;
-        }
-
-        async function sendTestMessage() {
-            const message = document.getElementById('testMessage').value;
-            const button = event.target;
-            const originalText = button.textContent;
-            
-            if (!message.trim()) {
-                alert('Please enter a message');
-                return;
-            }
-            
-            button.textContent = '⏳ Sending...';
-            button.disabled = true;
-            
-            try {
-                const response = await fetch(`${API_URL}/gemini`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ message: message })
-                });
+                document.getElementById('statusResult').textContent = 
+                    `❌ Error connecting to API: ${error.message}\n\n` +
+                    `This could be because:\n` +
+                    `1. The server is down or not responding\n` +
+                    `2. There's a network issue\n` +
+                    `3. The API endpoint has changed`;
                 
-                const data = await response.json();
-                
-                document.getElementById('messageResult').style.display = 'block';
-                
-                if (data.error) {
-                    document.getElementById('messageResult').textContent = 
-                        `❌ Error: ${data.error}\n` +
-                        `🔑 Key Used: #${data.keyUsed || 'Unknown'}\n` +
-                        `🔄 Attempts: ${data.attemptsUsed || 'Unknown'}`;
-                } else {
-                    document.getElementById('messageResult').textContent = 
-                        `✅ Success!\n` +
-                        `🔑 Key Used: #${data.keyUsed}\n` +
-                        `🔄 Attempts: ${data.attemptsUsed}\n\n` +
-                        `📝 Reply: ${data.reply}`;
-                }
-                
-            } catch (error) {
-                document.getElementById('messageResult').style.display = 'block';
-                document.getElementById('messageResult').textContent = `❌ Network Error: ${error.message}`;
+                // Update live status with error
+                document.getElementById('liveStatus').innerHTML = `
+                    <div class="status-card failed">
+                        <h4>🚫 Connection Status</h4>
+                        <div style="font-size: 16px; font-weight: bold;">Failed to connect to API</div>
+                    </div>
+                `;
             }
             
             button.textContent = originalText;
@@ -222,8 +409,8 @@
                 'Long': 'Tell me a detailed story about a robot who becomes friends with a cat and they go on adventures together in a magical forest.'
             };
             
-            document.getElementById('testMessage').value = messages[type];
-            await sendTestMessage();
+            document.getElementById('chatInput').value = messages[type];
+            await sendChatMessage();
         }
 
         async function rapidFireTest() {
@@ -232,6 +419,7 @@
             button.disabled = true;
             
             let results = '🔥 Rapid Fire Test Results:\n\n';
+            addMessageToChat("Starting rapid fire test (5 requests)...", false);
             
             for (let i = 1; i <= 5; i++) {
                 try {
@@ -257,8 +445,7 @@
                 await new Promise(resolve => setTimeout(resolve, 500));
             }
             
-            document.getElementById('messageResult').style.display = 'block';
-            document.getElementById('messageResult').textContent = results;
+            addMessageToChat(results, false);
             
             button.textContent = 'Rapid Fire (5 requests)';
             button.disabled = false;
@@ -273,6 +460,11 @@
                 const response = await fetch(`${API_URL}/reset-keys`, {
                     method: 'POST'
                 });
+                
+                if (!response.ok) {
+                    throw new Error(`API returned ${response.status}`);
+                }
+                
                 const data = await response.json();
                 
                 document.getElementById('statusResult').style.display = 'block';
@@ -291,7 +483,6 @@
 
         function updateLiveStatus(statusData) {
             const liveStatus = document.getElementById('liveStatus');
-            liveStatus.innerHTML = '';
             
             // Summary cards
             liveStatus.innerHTML = `
@@ -318,8 +509,11 @@
         setInterval(async () => {
             try {
                 const response = await fetch(`${API_URL}/api-status`);
-                const data = await response.json();
-                updateLiveStatus(data);
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    updateLiveStatus(data);
+                }
             } catch (error) {
                 console.log('Auto-refresh failed:', error);
             }
