@@ -19,24 +19,33 @@
             align-items: center;
             justify-content: center;
             color: white;
+            padding: 20px;
         }
 
         .container {
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(20px);
             border-radius: 20px;
-            padding: 60px 40px;
+            padding: 40px;
             box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
             border: 1px solid rgba(255, 255, 255, 0.2);
             text-align: center;
             max-width: 500px;
-            width: 90%;
+            width: 100%;
             animation: fadeIn 1s ease-out;
         }
 
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
         }
 
         .logo {
@@ -63,7 +72,7 @@
             gap: 25px;
         }
 
-        .option-btn {
+        .option-btn, .btn {
             background: linear-gradient(45deg, #ff6b6b, #ee5a52);
             border: none;
             padding: 18px 40px;
@@ -78,22 +87,18 @@
             box-shadow: 0 8px 20px rgba(255, 107, 107, 0.3);
         }
 
-        .option-btn:hover {
+        .option-btn:hover, .btn:hover {
             transform: translateY(-3px);
             box-shadow: 0 15px 30px rgba(255, 107, 107, 0.4);
             background: linear-gradient(45deg, #ff5252, #e53e3e);
         }
 
-        .option-btn:active {
-            transform: translateY(-1px);
-        }
-
-        .option-btn.secondary {
+        .option-btn.secondary, .btn.secondary {
             background: linear-gradient(45deg, #4ecdc4, #44a08d);
             box-shadow: 0 8px 20px rgba(78, 205, 196, 0.3);
         }
 
-        .option-btn.secondary:hover {
+        .option-btn.secondary:hover, .btn.secondary:hover {
             background: linear-gradient(45deg, #26d0ce, #2fb6af);
             box-shadow: 0 15px 30px rgba(78, 205, 196, 0.4);
         }
@@ -120,22 +125,6 @@
             100% { opacity: 1; }
         }
 
-        @media (max-width: 600px) {
-            .container {
-                padding: 40px 25px;
-                margin: 20px;
-            }
-            
-            .logo {
-                font-size: 2.8rem;
-            }
-            
-            .option-btn {
-                padding: 15px 30px;
-                font-size: 1rem;
-            }
-        }
-
         .features {
             margin-top: 30px;
             display: grid;
@@ -155,49 +144,502 @@
             font-size: 1.5rem;
             margin-bottom: 5px;
         }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            opacity: 0.9;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #4ecdc4;
+            box-shadow: 0 0 20px rgba(78, 205, 196, 0.3);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            padding: 10px 15px;
+            border-radius: 10px;
+            color: white;
+            cursor: pointer;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .links-list {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            text-align: left;
+        }
+
+        .link-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .status-online { background: #4ecdc4; }
+        .status-offline { background: #ff6b6b; }
+        .status-unknown { background: #ffa500; }
+
+        .delete-btn {
+            background: #ff6b6b;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .loading {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        .success-code {
+            background: rgba(78, 205, 196, 0.2);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border: 1px solid #4ecdc4;
+        }
+
+        .error-message {
+            background: rgba(255, 107, 107, 0.2);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border: 1px solid #ff6b6b;
+        }
+
+        .code-input {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .code-input input {
+            flex: 1;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 30px 20px;
+            }
+            
+            .logo {
+                font-size: 2.8rem;
+            }
+            
+            .features {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1 class="logo">AMAN UPTIME</h1>
-        <p class="subtitle">
-            <span class="status-indicator"></span>
-            Advanced Link Monitoring System
-        </p>
-        
-        <div class="options">
-            <a href="add-link.html" class="option-btn">
-                📝 Add New Link
-            </a>
+        <!-- Home Page -->
+        <div id="homePage" class="page active">
+            <h1 class="logo">AMAN UPTIME</h1>
+            <p class="subtitle">
+                <span class="status-indicator"></span>
+                Advanced Link Monitoring System
+            </p>
             
-            <a href="check-status.html" class="option-btn secondary">
-                🔍 Check Link Status
-            </a>
+            <div class="options">
+                <button class="option-btn" onclick="showPage('addLinkPage')">
+                    📝 Add New Link
+                </button>
+                
+                <button class="option-btn secondary" onclick="showPage('statusPage')">
+                    🔍 Check Link Status
+                </button>
+            </div>
+
+            <div class="features">
+                <div class="feature">
+                    <div class="feature-icon">⚡</div>
+                    Real-time Monitoring
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">📊</div>
+                    Detailed Analytics
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">🔒</div>
+                    Secure & Private
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">🚀</div>
+                    Lightning Fast
+                </div>
+            </div>
+
+            <div class="footer">
+                <p>Monitor your Render apps with ease</p>
+                <p>Built by Aman Khan</p>
+            </div>
         </div>
 
-        <div class="features">
-            <div class="feature">
-                <div class="feature-icon">⚡</div>
-                Real-time Monitoring
-            </div>
-            <div class="feature">
-                <div class="feature-icon">📊</div>
-                Detailed Analytics
-            </div>
-            <div class="feature">
-                <div class="feature-icon">🔒</div>
-                Secure & Private
-            </div>
-            <div class="feature">
-                <div class="feature-icon">🚀</div>
-                Lightning Fast
+        <!-- Add Link Page -->
+        <div id="addLinkPage" class="page">
+            <button class="back-btn" onclick="showPage('homePage')">← Back to Home</button>
+            
+            <h1 class="logo" style="font-size: 2.5rem;">ADD NEW LINK</h1>
+            <p style="margin-bottom: 30px;">Monitor your websites and APIs</p>
+
+            <form id="linkForm">
+                <div class="form-group">
+                    <label for="linkUrl">URL</label>
+                    <input type="url" id="linkUrl" placeholder="https://your-app.onrender.com" required>
+                </div>
+
+                <button type="submit" class="btn secondary" style="width: 100%; margin-top: 20px;">Add Link</button>
+            </form>
+
+            <div id="addLinkResult"></div>
+
+            <div class="links-list">
+                <h3 style="margin-bottom: 15px; text-align: center;">System Statistics</h3>
+                <div id="systemStats">
+                    <!-- Stats will be displayed here -->
+                </div>
             </div>
         </div>
 
-        <div class="footer">
-            <p>Monitor your Render apps with ease</p>
-            <p>Built by Aman Khan</p>
+        <!-- Status Check Page -->
+        <div id="statusPage" class="page">
+            <button class="back-btn" onclick="showPage('homePage')">← Back to Home</button>
+            
+            <h1 class="logo" style="font-size: 2.5rem;">LINK STATUS</h1>
+            <p style="margin-bottom: 30px;">Check the current status of your links</p>
+
+            <div class="code-input">
+                <input type="text" id="statusCode" placeholder="Enter 6-digit code" maxlength="6" style="text-transform: uppercase;">
+                <button class="btn secondary" onclick="checkLinkStatus()" style="padding: 12px 20px;">Check Status</button>
+            </div>
+
+            <div id="statusResult">
+                <!-- Status will be displayed here -->
+            </div>
         </div>
     </div>
+
+    <script>
+        // API Configuration
+        const API_BASE_URL = 'https://keep-alive-pm41.onrender.com';
+
+        // Show specific page
+        function showPage(pageId) {
+            // Hide all pages
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => page.classList.remove('active'));
+            
+            // Show selected page
+            document.getElementById(pageId).classList.add('active');
+            
+            // Update content if needed
+            if (pageId === 'addLinkPage') {
+                loadSystemStats();
+            }
+        }
+
+        // Add new link
+        document.getElementById('linkForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const url = document.getElementById('linkUrl').value.trim();
+            const resultDiv = document.getElementById('addLinkResult');
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            
+            // Show loading state
+            submitBtn.classList.add('loading');
+            submitBtn.textContent = 'Adding Link...';
+            resultDiv.innerHTML = '';
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/add`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ url })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    resultDiv.innerHTML = `
+                        <div class="success-code">
+                            <h4>✅ Link Added Successfully!</h4>
+                            <p><strong>Your Code:</strong> <code style="font-size: 1.2rem; font-weight: bold;">${data.code}</code></p>
+                            <p><strong>Status:</strong> ${data.status}</p>
+                            <p><strong>Response Time:</strong> ${data.responseTime}ms</p>
+                            <p style="margin-top: 10px; font-size: 0.9rem;">Save this code to check your link status anytime!</p>
+                        </div>
+                    `;
+                    
+                    // Reset form
+                    document.getElementById('linkForm').reset();
+                    
+                    // Reload stats
+                    setTimeout(() => loadSystemStats(), 1000);
+                } else {
+                    if (response.status === 409) {
+                        resultDiv.innerHTML = `
+                            <div class="error-message">
+                                <h4>⚠️ Link Already Exists</h4>
+                                <p>This URL is already being monitored.</p>
+                                <p><strong>Existing Code:</strong> <code>${data.code}</code></p>
+                            </div>
+                        `;
+                    } else {
+                        resultDiv.innerHTML = `
+                            <div class="error-message">
+                                <h4>❌ Error Adding Link</h4>
+                                <p>${data.message}</p>
+                            </div>
+                        `;
+                    }
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                resultDiv.innerHTML = `
+                    <div class="error-message">
+                        <h4>❌ Connection Error</h4>
+                        <p>Unable to connect to monitoring service. Please check your internet connection and try again.</p>
+                    </div>
+                `;
+            } finally {
+                // Reset button state
+                submitBtn.classList.remove('loading');
+                submitBtn.textContent = 'Add Link';
+            }
+        });
+
+        // Load system statistics
+        async function loadSystemStats() {
+            const statsDiv = document.getElementById('systemStats');
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/ping`);
+                const data = await response.json();
+                
+                if (response.ok) {
+                    const uptimeHours = Math.floor(data.uptime / 3600);
+                    const uptimeMinutes = Math.floor((data.uptime % 3600) / 60);
+                    
+                    statsDiv.innerHTML = `
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <div class="stat-number">${data.totalLinks || 0}</div>
+                                <div class="stat-label">Total Links</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-number">${data.activeLinks || 0}</div>
+                                <div class="stat-label">Active Links</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-number">${uptimeHours}h ${uptimeMinutes}m</div>
+                                <div class="stat-label">System Uptime</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-number">v${data.version || '2.0'}</div>
+                                <div class="stat-label">Version</div>
+                            </div>
+                        </div>
+                        <div style="text-align: center; margin-top: 15px;">
+                            <p style="opacity: 0.8; font-size: 0.9rem;">🟢 ${data.status}</p>
+                        </div>
+                    `;
+                } else {
+                    statsDiv.innerHTML = `
+                        <div class="error-message">
+                            <p>Unable to load system statistics</p>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                statsDiv.innerHTML = `
+                    <div class="error-message">
+                        <p>Connection error - Unable to load stats</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Check link status
+        async function checkLinkStatus() {
+            const code = document.getElementById('statusCode').value.trim().toUpperCase();
+            const resultDiv = document.getElementById('statusResult');
+            const checkBtn = event.target;
+            
+            if (!code || code.length !== 6) {
+                resultDiv.innerHTML = `
+                    <div class="error-message">
+                        <p>Please enter a valid 6-digit code</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Show loading state
+            checkBtn.classList.add('loading');
+            checkBtn.textContent = 'Checking...';
+            resultDiv.innerHTML = '';
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/status/${code}`);
+                const data = await response.json();
+
+                if (data.success) {
+                    const linkData = data.data;
+                    const statusClass = linkData.status === 'online' ? 'status-online' : 
+                                       linkData.status === 'offline' ? 'status-offline' : 'status-unknown';
+                    const statusIcon = linkData.status === 'online' ? '🟢' : 
+                                      linkData.status === 'offline' ? '🔴' : '🟡';
+                    
+                    resultDiv.innerHTML = `
+                        <div class="link-item" style="flex-direction: column; align-items: start; margin-bottom: 20px;">
+                            <div style="display: flex; align-items: center; width: 100%; margin-bottom: 15px;">
+                                <span class="status-dot ${statusClass}"></span>
+                                <div style="flex: 1;">
+                                    <div style="font-weight: 600; font-size: 1.1rem;">${statusIcon} ${linkData.status.toUpperCase()}</div>
+                                    <div style="font-size: 0.9rem; opacity: 0.8; word-break: break-all;">${linkData.url}</div>
+                                </div>
+                            </div>
+                            
+                            <div style="width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+          <div style="background: rgba(255, 255, 255, 0.1); padding: 10px; border-radius: 8px; text-align: center;">
+                                    <div style="font-weight: bold;">${linkData.responseTime}</div>
+                                    <div style="font-size: 0.8rem; opacity: 0.7;">Response Time</div>
+                                </div>
+                                <div style="background: rgba(255, 255, 255, 0.1); padding: 10px; border-radius: 8px; text-align: center;">
+                                    <div style="font-weight: bold;">${linkData.uptime}</div>
+                                    <div style="font-size: 0.8rem; opacity: 0.7;">Uptime</div>
+                                </div>
+                                <div style="background: rgba(255, 255, 255, 0.1); padding: 10px; border-radius: 8px; text-align: center;">
+                                    <div style="font-weight: bold;">${linkData.successRate}</div>
+                                    <div style="font-size: 0.8rem; opacity: 0.7;">Success Rate</div>
+                                </div>
+                                <div style="background: rgba(255, 255, 255, 0.1); padding: 10px; border-radius: 8px; text-align: center;">
+                                    <div style="font-weight: bold;">${linkData.totalChecks}</div>
+                                    <div style="font-size: 0.8rem; opacity: 0.7;">Total Checks</div>
+                                </div>
+                            </div>
+                            
+                            <div style="width: 100%; font-size: 0.9rem; opacity: 0.8;">
+                                <p><strong>Code:</strong> ${linkData.code}</p>
+                                <p><strong>Last Check:</strong> ${new Date(linkData.lastCheck).toLocaleString()}</p>
+                                <p><strong>Added:</strong> ${new Date(linkData.addedAt).toLocaleString()}</p>
+                                ${linkData.lastSuccess !== 'Never' ? `<p><strong>Last Success:</strong> ${new Date(linkData.lastSuccess).toLocaleString()}</p>` : ''}
+                                ${linkData.failCount > 0 ? `<p style="color: #ff6b6b;"><strong>Fail Count:</strong> ${linkData.failCount}</p>` : ''}
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="error-message">
+                            <h4>❌ ${data.message}</h4>
+                            <p>Please check your code and try again.</p>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                resultDiv.innerHTML = `
+                    <div class="error-message">
+                        <h4>❌ Connection Error</h4>
+                        <p>Unable to connect to monitoring service. Please check your internet connection and try again.</p>
+                    </div>
+                `;
+            } finally {
+                // Reset button state
+                checkBtn.classList.remove('loading');
+                checkBtn.textContent = '🔍 Check Status';
+            }
+        }
+
+        // Auto-uppercase code input
+        document.getElementById('statusCode').addEventListener('input', function(e) {
+            e.target.value = e.target.value.toUpperCase();
+        });
+
+        // Initialize app
+        loadSystemStats();
+    </script>
 </body>
 </html>
