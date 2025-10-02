@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aman Uptime - Link Monitoring System</title>
+    <title>Akash Pincode Finder - Design 2</title>
     <style>
         * {
             margin: 0;
@@ -12,634 +12,431 @@
         }
 
         body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Courier New', monospace;
+            background: #0a0e27;
             min-height: 100vh;
             display: flex;
-            align-items: center;
             justify-content: center;
-            color: white;
+            align-items: center;
             padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(90deg, rgba(0, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(rgba(0, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: grid 20s linear infinite;
+        }
+
+        @keyframes grid {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(50px); }
         }
 
         .container {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(20px);
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            text-align: center;
-            max-width: 500px;
-            width: 100%;
-            animation: fadeIn 1s ease-out;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .page {
-            display: none;
-        }
-
-        .page.active {
-            display: block;
-        }
-
-        .logo {
-            font-size: 3.5rem;
-            font-weight: 900;
-            margin-bottom: 15px;
-            background: linear-gradient(45deg, #fff, #f8f9fa);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-            letter-spacing: -2px;
-        }
-
-        .subtitle {
-            font-size: 1.1rem;
-            margin-bottom: 50px;
-            opacity: 0.9;
-            font-weight: 300;
-        }
-
-        .options {
-            display: flex;
-            flex-direction: column;
-            gap: 25px;
-        }
-
-        .option-btn, .btn {
-            background: linear-gradient(45deg, #ff6b6b, #ee5a52);
-            border: none;
-            padding: 18px 40px;
+            background: linear-gradient(145deg, #0f172a 0%, #1e293b 100%);
+            border: 2px solid #00ffff;
             border-radius: 15px;
-            color: white;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: block;
-            box-shadow: 0 8px 20px rgba(255, 107, 107, 0.3);
-        }
-
-        .option-btn:hover, .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 30px rgba(255, 107, 107, 0.4);
-            background: linear-gradient(45deg, #ff5252, #e53e3e);
-        }
-
-        .option-btn.secondary, .btn.secondary {
-            background: linear-gradient(45deg, #4ecdc4, #44a08d);
-            box-shadow: 0 8px 20px rgba(78, 205, 196, 0.3);
-        }
-
-        .option-btn.secondary:hover, .btn.secondary:hover {
-            background: linear-gradient(45deg, #26d0ce, #2fb6af);
-            box-shadow: 0 15px 30px rgba(78, 205, 196, 0.4);
-        }
-
-        .footer {
-            margin-top: 40px;
-            opacity: 0.7;
-            font-size: 0.9rem;
-        }
-
-        .status-indicator {
-            display: inline-block;
-            width: 12px;
-            height: 12px;
-            background: #4ecdc4;
-            border-radius: 50%;
-            margin-right: 8px;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.5; }
-            100% { opacity: 1; }
-        }
-
-        .features {
-            margin-top: 30px;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            opacity: 0.8;
-        }
-
-        .feature {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 15px;
-            border-radius: 10px;
-            font-size: 0.9rem;
-        }
-
-        .feature-icon {
-            font-size: 1.5rem;
-            margin-bottom: 5px;
-        }
-
-        /* Form Styles */
-        .form-group {
-            margin-bottom: 20px;
-            text-align: left;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            opacity: 0.9;
-        }
-
-        .form-group input, .form-group select {
+            box-shadow: 
+                0 0 30px rgba(0, 255, 255, 0.5),
+                inset 0 0 50px rgba(0, 255, 255, 0.05);
+            max-width: 750px;
             width: 100%;
-            padding: 12px 15px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 10px;
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            font-size: 16px;
-            transition: all 0.3s ease;
+            padding: 35px;
+            position: relative;
+            z-index: 1;
         }
 
-        .form-group input::placeholder {
-            color: rgba(255, 255, 255, 0.6);
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #00ffff, #ff00ff, #00ffff);
+            border-radius: 15px;
+            z-index: -1;
+            animation: borderGlow 3s linear infinite;
+            opacity: 0.5;
         }
 
-        .form-group input:focus, .form-group select:focus {
-            outline: none;
-            border-color: #4ecdc4;
-            box-shadow: 0 0 20px rgba(78, 205, 196, 0.3);
-            background: rgba(255, 255, 255, 0.15);
+        @keyframes borderGlow {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
         }
 
-        .back-btn {
-            background: rgba(255, 255, 255, 0.2);
-            border: none;
-            padding: 10px 15px;
-            border-radius: 10px;
-            color: white;
-            cursor: pointer;
-            margin-bottom: 20px;
-            transition: all 0.3s ease;
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
         }
 
-        .back-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: translateY(-2px);
-        }
-
-        .links-list {
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 1px solid rgba(255, 255, 255, 0.2);
-            text-align: left;
-        }
-
-        .link-item {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 15px;
-            border-radius: 10px;
+        .header h1 {
+            color: #00ffff;
+            font-size: 2.5em;
+            font-weight: 900;
+            text-shadow: 
+                0 0 10px #00ffff,
+                0 0 20px #00ffff,
+                0 0 30px #00ffff;
+            letter-spacing: 5px;
             margin-bottom: 10px;
+            animation: neon 1.5s ease-in-out infinite alternate;
+        }
+
+        @keyframes neon {
+            from {
+                text-shadow: 
+                    0 0 10px #00ffff,
+                    0 0 20px #00ffff,
+                    0 0 30px #00ffff;
+            }
+            to {
+                text-shadow: 
+                    0 0 20px #00ffff,
+                    0 0 30px #00ffff,
+                    0 0 40px #00ffff,
+                    0 0 50px #00ffff;
+            }
+        }
+
+        .header p {
+            color: #ff00ff;
+            font-size: 1.1em;
+            text-shadow: 0 0 10px #ff00ff;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+
+        .status-bar {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-        }
-
-        .status-dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            margin-right: 10px;
-        }
-
-        .status-online { background: #4ecdc4; }
-        .status-offline { background: #ff6b6b; }
-        .status-unknown { background: #ffa500; }
-
-        .delete-btn {
-            background: #ff6b6b;
-            border: none;
-            padding: 5px 10px;
+            color: #00ff00;
+            font-size: 0.85em;
+            margin-bottom: 20px;
+            padding: 10px;
+            background: rgba(0, 255, 0, 0.05);
+            border: 1px solid #00ff00;
             border-radius: 5px;
-            color: white;
-            cursor: pointer;
-            font-size: 12px;
         }
 
-        .loading {
-            opacity: 0.6;
-            pointer-events: none;
+        .status-bar span {
+            animation: blink 2s infinite;
         }
 
-        .success-code {
-            background: rgba(78, 205, 196, 0.2);
-            padding: 15px;
+        @keyframes blink {
+            0%, 50%, 100% { opacity: 1; }
+            25%, 75% { opacity: 0.5; }
+        }
+
+        .chat-container {
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid #00ff00;
             border-radius: 10px;
-            margin: 15px 0;
-            border: 1px solid #4ecdc4;
-        }
-
-        .error-message {
-            background: rgba(255, 107, 107, 0.2);
-            padding: 15px;
-            border-radius: 10px;
-            margin: 15px 0;
-            border: 1px solid #ff6b6b;
-        }
-
-        .code-input {
-            display: flex;
-            gap: 10px;
+            padding: 20px;
             margin-bottom: 20px;
+            max-height: 400px;
+            overflow-y: auto;
+            min-height: 250px;
+            box-shadow: inset 0 0 20px rgba(0, 255, 0, 0.1);
         }
 
-        .code-input input {
-            flex: 1;
+        .message {
+            margin-bottom: 18px;
+            animation: fadeInUp 0.5s ease-out;
         }
 
-        .stats-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-bottom: 20px;
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        .stat-card {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 15px;
-            border-radius: 10px;
-            text-align: center;
-        }
-
-        .stat-number {
-            font-size: 2rem;
+        .user-message {
+            background: linear-gradient(135deg, #ff00ff 0%, #00ffff 100%);
+            color: #0a0e27;
+            padding: 12px 18px;
+            border-radius: 15px 15px 3px 15px;
+            display: inline-block;
+            max-width: 70%;
+            margin-left: auto;
+            float: right;
+            clear: both;
+            box-shadow: 
+                0 0 15px rgba(255, 0, 255, 0.5),
+                inset 0 0 10px rgba(255, 255, 255, 0.2);
             font-weight: bold;
-            margin-bottom: 5px;
+            border: 1px solid #ff00ff;
         }
 
-        .stat-label {
-            font-size: 0.9rem;
-            opacity: 0.8;
+        .ai-message {
+            background: rgba(0, 255, 0, 0.1);
+            color: #00ff00;
+            padding: 12px 18px;
+            border-radius: 15px 15px 15px 3px;
+            display: inline-block;
+            max-width: 70%;
+            border: 2px solid #00ff00;
+            box-shadow: 
+                0 0 15px rgba(0, 255, 0, 0.3),
+                inset 0 0 10px rgba(0, 255, 0, 0.1);
+            font-family: 'Courier New', monospace;
+        }
+
+        .ai-label {
+            font-weight: bold;
+            color: #00ffff;
+            font-size: 0.9em;
+            margin-bottom: 8px;
+            text-shadow: 0 0 5px #00ffff;
+        }
+
+        .input-container {
+            display: flex;
+            gap: 12px;
+            position: relative;
+        }
+
+        #userInput {
+            flex: 1;
+            padding: 15px 20px;
+            border: 2px solid #00ffff;
+            background: rgba(0, 255, 255, 0.05);
+            color: #00ffff;
+            border-radius: 8px;
+            font-size: 1em;
+            outline: none;
+            transition: all 0.3s ease;
+            font-family: 'Courier New', monospace;
+        }
+
+        #userInput::placeholder {
+            color: rgba(0, 255, 255, 0.5);
+        }
+
+        #userInput:focus {
+            border-color: #ff00ff;
+            background: rgba(255, 0, 255, 0.05);
+            box-shadow: 
+                0 0 20px rgba(255, 0, 255, 0.5),
+                inset 0 0 10px rgba(255, 0, 255, 0.1);
+        }
+
+        #sendBtn {
+            background: linear-gradient(135deg, #00ffff 0%, #ff00ff 100%);
+            color: #0a0e27;
+            border: 2px solid #00ffff;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            font-family: 'Courier New', monospace;
+            text-transform: uppercase;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+        }
+
+        #sendBtn:hover {
+            transform: scale(1.05);
+            box-shadow: 
+                0 0 30px rgba(0, 255, 255, 0.8),
+                0 0 40px rgba(255, 0, 255, 0.6);
+        }
+
+        #sendBtn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .loader {
+            display: none;
+            text-align: left;
+            margin-bottom: 15px;
+        }
+
+        .loader.active {
+            display: block;
+        }
+
+        .loader span {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: #00ff00;
+            border-radius: 50%;
+            margin: 0 3px;
+            box-shadow: 0 0 10px #00ff00;
+            animation: loaderBounce 1.4s infinite ease-in-out both;
+        }
+
+        .loader span:nth-child(1) { animation-delay: -0.32s; }
+        .loader span:nth-child(2) { animation-delay: -0.16s; }
+
+        @keyframes loaderBounce {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
+
+        .welcome-msg {
+            text-align: center;
+            color: #00ffff;
+            padding: 50px 20px;
+            font-size: 1.1em;
+        }
+
+        .welcome-msg .icon {
+            font-size: 3.5em;
+            margin-bottom: 20px;
+            text-shadow: 0 0 20px #00ffff;
+            animation: rotate 4s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid #00ff00;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #00ffff 0%, #ff00ff 100%);
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
         }
 
         @media (max-width: 600px) {
-            .container {
-                padding: 30px 20px;
-            }
-            
-            .logo {
-                font-size: 2.8rem;
-            }
-            
-            .features {
-                grid-template-columns: 1fr;
-            }
-
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
+            .container { padding: 20px; }
+            .header h1 { font-size: 1.8em; letter-spacing: 2px; }
+            .user-message, .ai-message { max-width: 85%; }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Home Page -->
-        <div id="homePage" class="page active">
-            <h1 class="logo">AMAN UPTIME</h1>
-            <p class="subtitle">
-                <span class="status-indicator"></span>
-                Advanced Link Monitoring System
-            </p>
-            
-            <div class="options">
-                <button class="option-btn" onclick="showPage('addLinkPage')">
-                    📝 Add New Link
-                </button>
-                
-                <button class="option-btn secondary" onclick="showPage('statusPage')">
-                    🔍 Check Link Status
-                </button>
-            </div>
+        <div class="header">
+            <h1>⚡ AKASH ⚡</h1>
+            <p>[ PINCODE FINDER AI ]</p>
+        </div>
 
-            <div class="features">
-                <div class="feature">
-                    <div class="feature-icon">⚡</div>
-                    Real-time Monitoring
-                </div>
-                <div class="feature">
-                    <div class="feature-icon">📊</div>
-                    Detailed Analytics
-                </div>
-                <div class="feature">
-                    <div class="feature-icon">🔒</div>
-                    Secure & Private
-                </div>
-                <div class="feature">
-                    <div class="feature-icon">🚀</div>
-                    Lightning Fast
-                </div>
-            </div>
+        <div class="status-bar">
+            <span>● SYSTEM ONLINE</span>
+            <span>AI READY</span>
+            <span>SECURE CONNECTION</span>
+        </div>
 
-            <div class="footer">
-                <p>Monitor your Render apps with ease</p>
-                <p>Built by Aman Khan</p>
+        <div class="chat-container" id="chatContainer">
+            <div class="welcome-msg">
+                <div class="icon">🤖</div>
+                <p>// WELCOME TO AKASH PINCODE FINDER //<br>
+                >>> AI SYSTEM INITIALIZED<br>
+                >>> READY FOR QUERIES</p>
             </div>
         </div>
 
-        <!-- Add Link Page -->
-        <div id="addLinkPage" class="page">
-            <button class="back-btn" onclick="showPage('homePage')">← Back to Home</button>
-            
-            <h1 class="logo" style="font-size: 2.5rem;">ADD NEW LINK</h1>
-            <p style="margin-bottom: 30px;">Monitor your websites and APIs</p>
-
-            <form id="linkForm">
-                <div class="form-group">
-                    <label for="linkUrl">URL</label>
-                    <input type="url" id="linkUrl" placeholder="https://your-app.onrender.com" required>
-                </div>
-
-                <button type="submit" class="btn secondary" style="width: 100%; margin-top: 20px;">Add Link</button>
-            </form>
-
-            <div id="addLinkResult"></div>
-
-            <div class="links-list">
-                <h3 style="margin-bottom: 15px; text-align: center;">System Statistics</h3>
-                <div id="systemStats">
-                    <!-- Stats will be displayed here -->
-                </div>
-            </div>
+        <div class="loader" id="loader">
+            <span></span>
+            <span></span>
+            <span></span>
         </div>
 
-        <!-- Status Check Page -->
-        <div id="statusPage" class="page">
-            <button class="back-btn" onclick="showPage('homePage')">← Back to Home</button>
-            
-            <h1 class="logo" style="font-size: 2.5rem;">LINK STATUS</h1>
-            <p style="margin-bottom: 30px;">Check the current status of your links</p>
-
-            <div class="code-input">
-                <input type="text" id="statusCode" placeholder="Enter 6-digit code" maxlength="6" style="text-transform: uppercase;">
-                <button class="btn secondary" onclick="checkLinkStatus()" style="padding: 12px 20px;">Check Status</button>
-            </div>
-
-            <div id="statusResult">
-                <!-- Status will be displayed here -->
-            </div>
+        <div class="input-container">
+            <input 
+                type="text" 
+                id="userInput" 
+                placeholder="> Type your query here..."
+                onkeypress="if(event.key === 'Enter') sendMessage()"
+            >
+            <button id="sendBtn" onclick="sendMessage()">SEND</button>
         </div>
     </div>
 
     <script>
-        // API Configuration
-        const API_BASE_URL = 'https://keep-alive-pm41.onrender.com';
+        const API_URL = 'https://website-api-41pg.onrender.com/Aman';
+        const chatContainer = document.getElementById('chatContainer');
+        const userInput = document.getElementById('userInput');
+        const sendBtn = document.getElementById('sendBtn');
+        const loader = document.getElementById('loader');
 
-        // Show specific page
-        function showPage(pageId) {
-            // Hide all pages
-            const pages = document.querySelectorAll('.page');
-            pages.forEach(page => page.classList.remove('active'));
+        function addMessage(text, isUser) {
+            const welcomeMsg = chatContainer.querySelector('.welcome-msg');
+            if (welcomeMsg) welcomeMsg.remove();
+
+            const msgDiv = document.createElement('div');
+            msgDiv.className = 'message';
             
-            // Show selected page
-            document.getElementById(pageId).classList.add('active');
-            
-            // Update content if needed
-            if (pageId === 'addLinkPage') {
-                loadSystemStats();
+            if (isUser) {
+                msgDiv.innerHTML = `<div class="user-message">${text}</div>`;
+            } else {
+                msgDiv.innerHTML = `
+                    <div class="ai-message">
+                        <div class="ai-label">⚡ AKASH_AI ⚡</div>
+                        <div>${text}</div>
+                    </div>
+                `;
             }
+            
+            chatContainer.appendChild(msgDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
         }
 
-        // Add new link
-        document.getElementById('linkForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            const url = document.getElementById('linkUrl').value.trim();
-            const resultDiv = document.getElementById('addLinkResult');
-            const submitBtn = e.target.querySelector('button[type="submit"]');
-            
-            // Show loading state
-            submitBtn.classList.add('loading');
-            submitBtn.textContent = 'Adding Link...';
-            resultDiv.innerHTML = '';
+        async function sendMessage() {
+            const message = userInput.value.trim();
+            if (!message) return;
+
+            addMessage(message, true);
+            userInput.value = '';
+            sendBtn.disabled = true;
+            loader.classList.add('active');
 
             try {
-                const response = await fetch(`${API_BASE_URL}/add`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ url })
-                });
+                const response = await fetch(`${API_URL}?prompt=${encodeURIComponent(message)}`);
+                if (!response.ok) throw new Error('Network error');
 
                 const data = await response.json();
-
-                if (data.success) {
-                    resultDiv.innerHTML = `
-                        <div class="success-code">
-                            <h4>✅ Link Added Successfully!</h4>
-                            <p><strong>Your Code:</strong> <code style="font-size: 1.2rem; font-weight: bold;">${data.code}</code></p>
-                            <p><strong>Status:</strong> ${data.status}</p>
-                            <p><strong>Response Time:</strong> ${data.responseTime}ms</p>
-                            <p style="margin-top: 10px; font-size: 0.9rem;">Save this code to check your link status anytime!</p>
-                        </div>
-                    `;
-                    
-                    // Reset form
-                    document.getElementById('linkForm').reset();
-                    
-                    // Reload stats
-                    setTimeout(() => loadSystemStats(), 1000);
-                } else {
-                    if (response.status === 409) {
-                        resultDiv.innerHTML = `
-                            <div class="error-message">
-                                <h4>⚠️ Link Already Exists</h4>
-                                <p>This URL is already being monitored.</p>
-                                <p><strong>Existing Code:</strong> <code>${data.code}</code></p>
-                            </div>
-                        `;
-                    } else {
-                        resultDiv.innerHTML = `
-                            <div class="error-message">
-                                <h4>❌ Error Adding Link</h4>
-                                <p>${data.message}</p>
-                            </div>
-                        `;
+                let aiResponse = '>>> ERROR: Unable to process request';
+                
+                if (data.candidates && data.candidates[0] && data.candidates[0].content) {
+                    const parts = data.candidates[0].content.parts;
+                    if (parts && parts[0] && parts[0].text) {
+                        aiResponse = parts[0].text;
                     }
                 }
-            } catch (error) {
-                console.error('Error:', error);
-                resultDiv.innerHTML = `
-                    <div class="error-message">
-                        <h4>❌ Connection Error</h4>
-                        <p>Unable to connect to monitoring service. Please check your internet connection and try again.</p>
-                    </div>
-                `;
-            } finally {
-                // Reset button state
-                submitBtn.classList.remove('loading');
-                submitBtn.textContent = 'Add Link';
-            }
-        });
 
-        // Load system statistics
-        async function loadSystemStats() {
-            const statsDiv = document.getElementById('systemStats');
-            
-            try {
-                const response = await fetch(`${API_BASE_URL}/ping`);
-                const data = await response.json();
+                loader.classList.remove('active');
+                addMessage(aiResponse, false);
                 
-                if (response.ok) {
-                    const uptimeHours = Math.floor(data.uptime / 3600);
-                    const uptimeMinutes = Math.floor((data.uptime % 3600) / 60);
-                    
-                    statsDiv.innerHTML = `
-                        <div class="stats-grid">
-                            <div class="stat-card">
-                                <div class="stat-number">${data.totalLinks || 0}</div>
-                                <div class="stat-label">Total Links</div>
-                            </div>
-                            <div class="stat-card">
-                                <div class="stat-number">${data.activeLinks || 0}</div>
-                                <div class="stat-label">Active Links</div>
-                            </div>
-                            <div class="stat-card">
-                                <div class="stat-number">${uptimeHours}h ${uptimeMinutes}m</div>
-                                <div class="stat-label">System Uptime</div>
-                            </div>
-                            <div class="stat-card">
-                                <div class="stat-number">v${data.version || '2.0'}</div>
-                                <div class="stat-label">Version</div>
-                            </div>
-                        </div>
-                        <div style="text-align: center; margin-top: 15px;">
-                            <p style="opacity: 0.8; font-size: 0.9rem;">🟢 ${data.status}</p>
-                        </div>
-                    `;
-                } else {
-                    statsDiv.innerHTML = `
-                        <div class="error-message">
-                            <p>Unable to load system statistics</p>
-                        </div>
-                    `;
-                }
-            } catch (error) {
-                statsDiv.innerHTML = `
-                    <div class="error-message">
-                        <p>Connection error - Unable to load stats</p>
-                    </div>
-                `;
-            }
-        }
-
-        // Check link status
-        async function checkLinkStatus() {
-            const code = document.getElementById('statusCode').value.trim().toUpperCase();
-            const resultDiv = document.getElementById('statusResult');
-            const checkBtn = event.target;
-            
-            if (!code || code.length !== 6) {
-                resultDiv.innerHTML = `
-                    <div class="error-message">
-                        <p>Please enter a valid 6-digit code</p>
-                    </div>
-                `;
-                return;
-            }
-            
-            // Show loading state
-            checkBtn.classList.add('loading');
-            checkBtn.textContent = 'Checking...';
-            resultDiv.innerHTML = '';
-
-            try {
-                const response = await fetch(`${API_BASE_URL}/status/${code}`);
-                const data = await response.json();
-
-                if (data.success) {
-                    const linkData = data.data;
-                    const statusClass = linkData.status === 'online' ? 'status-online' : 
-                                       linkData.status === 'offline' ? 'status-offline' : 'status-unknown';
-                    const statusIcon = linkData.status === 'online' ? '🟢' : 
-                                      linkData.status === 'offline' ? '🔴' : '🟡';
-                    
-                    resultDiv.innerHTML = `
-                        <div class="link-item" style="flex-direction: column; align-items: start; margin-bottom: 20px;">
-                            <div style="display: flex; align-items: center; width: 100%; margin-bottom: 15px;">
-                                <span class="status-dot ${statusClass}"></span>
-                                <div style="flex: 1;">
-                                    <div style="font-weight: 600; font-size: 1.1rem;">${statusIcon} ${linkData.status.toUpperCase()}</div>
-                                    <div style="font-size: 0.9rem; opacity: 0.8; word-break: break-all;">${linkData.url}</div>
-                                </div>
-                            </div>
-                            
-                            <div style="width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
-          <div style="background: rgba(255, 255, 255, 0.1); padding: 10px; border-radius: 8px; text-align: center;">
-                                    <div style="font-weight: bold;">${linkData.responseTime}</div>
-                                    <div style="font-size: 0.8rem; opacity: 0.7;">Response Time</div>
-                                </div>
-                                <div style="background: rgba(255, 255, 255, 0.1); padding: 10px; border-radius: 8px; text-align: center;">
-                                    <div style="font-weight: bold;">${linkData.uptime}</div>
-                                    <div style="font-size: 0.8rem; opacity: 0.7;">Uptime</div>
-                                </div>
-                                <div style="background: rgba(255, 255, 255, 0.1); padding: 10px; border-radius: 8px; text-align: center;">
-                                    <div style="font-weight: bold;">${linkData.successRate}</div>
-                                    <div style="font-size: 0.8rem; opacity: 0.7;">Success Rate</div>
-                                </div>
-                                <div style="background: rgba(255, 255, 255, 0.1); padding: 10px; border-radius: 8px; text-align: center;">
-                                    <div style="font-weight: bold;">${linkData.totalChecks}</div>
-                                    <div style="font-size: 0.8rem; opacity: 0.7;">Total Checks</div>
-                                </div>
-                            </div>
-                            
-                            <div style="width: 100%; font-size: 0.9rem; opacity: 0.8;">
-                                <p><strong>Code:</strong> ${linkData.code}</p>
-                                <p><strong>Last Check:</strong> ${new Date(linkData.lastCheck).toLocaleString()}</p>
-                                <p><strong>Added:</strong> ${new Date(linkData.addedAt).toLocaleString()}</p>
-                                ${linkData.lastSuccess !== 'Never' ? `<p><strong>Last Success:</strong> ${new Date(linkData.lastSuccess).toLocaleString()}</p>` : ''}
-                                ${linkData.failCount > 0 ? `<p style="color: #ff6b6b;"><strong>Fail Count:</strong> ${linkData.failCount}</p>` : ''}
-                            </div>
-                        </div>
-                    `;
-                } else {
-                    resultDiv.innerHTML = `
-                        <div class="error-message">
-                            <h4>❌ ${data.message}</h4>
-                            <p>Please check your code and try again.</p>
-                        </div>
-                    `;
-                }
             } catch (error) {
                 console.error('Error:', error);
-                resultDiv.innerHTML = `
-                    <div class="error-message">
-                        <h4>❌ Connection Error</h4>
-                        <p>Unable to connect to monitoring service. Please check your internet connection and try again.</p>
-                    </div>
-                `;
+                loader.classList.remove('active');
+                addMessage('⚠ CONNECTION ERROR: Please retry', false);
             } finally {
-                // Reset button state
-                checkBtn.classList.remove('loading');
-                checkBtn.textContent = '🔍 Check Status';
+                sendBtn.disabled = false;
+                userInput.focus();
             }
         }
 
-        // Auto-uppercase code input
-        document.getElementById('statusCode').addEventListener('input', function(e) {
-            e.target.value = e.target.value.toUpperCase();
-        });
-
-        // Initialize app
-        loadSystemStats();
+        userInput.focus();
     </script>
 </body>
 </html>
