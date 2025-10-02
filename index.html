@@ -372,7 +372,7 @@
     </div>
 
     <script>
-        const API_URL = 'https://website-api-41pg.onrender.com/Aman';
+        const API_URL = 'https://website-api-41pg.onrender.com/aman';
         const chatContainer = document.getElementById('chatContainer');
         const userInput = document.getElementById('userInput');
         const sendBtn = document.getElementById('sendBtn');
@@ -410,26 +410,38 @@
             loader.classList.add('active');
 
             try {
-                const response = await fetch(`${API_URL}?prompt=${encodeURIComponent(message)}`);
-                if (!response.ok) throw new Error('Network error');
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        message: message
+                    })
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
 
                 const data = await response.json();
+                console.log('API Response:', data);
+                
                 let aiResponse = '>>> ERROR: Unable to process request';
                 
-                if (data.candidates && data.candidates[0] && data.candidates[0].content) {
-                    const parts = data.candidates[0].content.parts;
-                    if (parts && parts[0] && parts[0].text) {
-                        aiResponse = parts[0].text;
-                    }
+                if (data.reply) {
+                    aiResponse = data.reply;
+                } else if (data.error) {
+                    aiResponse = `⚠ Error: ${data.error}`;
                 }
 
                 loader.classList.remove('active');
                 addMessage(aiResponse, false);
                 
             } catch (error) {
-                console.error('Error:', error);
+                console.error('Full Error:', error);
                 loader.classList.remove('active');
-                addMessage('⚠ CONNECTION ERROR: Please retry', false);
+                addMessage(`⚠ CONNECTION ERROR: ${error.message}`, false);
             } finally {
                 sendBtn.disabled = false;
                 userInput.focus();
